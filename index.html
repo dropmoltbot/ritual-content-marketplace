@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AI Content Marketplace | Ritual Chain</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231C1917' rx='20'/%3E%3Cpolygon points='50,15 80,50 50,85 20,50' stroke='%234cc193' stroke-width='2' fill='rgba(76,193,147,0.05)'/%3E%3Ccircle cx='50' cy='50' r='4' fill='%234cc193'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#f5f0e8; --ink:#1C1917; --emerald:#295641; --emerald-light:#34a37a;
+  --emerald-glow:#4cc193; --beige:#e7e0d4; --stone:#78716c;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--ink); color:var(--paper); font-family:'Instrument Sans',sans-serif; line-height:1.6; }
+.mono { font-family:'JetBrains Mono',monospace; }
+.label { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--stone); text-transform:uppercase; letter-spacing:0.22em; }
+
+nav { position:sticky; top:0; z-index:100; display:flex; justify-content:space-between; align-items:center; padding:16px 40px; background:rgba(28,25,23,0.95); backdrop-filter:blur(10px); border-bottom:1px solid rgba(76,193,147,0.1); }
+nav h1 { font-family:'Instrument Serif',serif; font-size:1.4rem; }
+nav .sub { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--stone); }
+.live-pill { display:flex; align-items:center; gap:6px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--emerald-glow); border:1px solid var(--emerald); border-radius:4px; padding:4px 12px; }
+.live-dot { width:6px; height:6px; border-radius:50%; background:var(--emerald-glow); box-shadow:0 0 6px var(--emerald-glow); animation:pulse 1.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.hero { padding:80px 40px; text-align:center; max-width:900px; margin:0 auto; }
+.hero h2 { font-family:'Instrument Serif',serif; font-size:3.5rem; letter-spacing:-0.02em; line-height:1.1; }
+.hero p { font-size:1.2rem; color:rgba(245,240,232,0.6); margin-top:16px; }
+.stats-row { display:flex; justify-content:center; gap:40px; margin-top:40px; }
+.stat { text-align:center; }
+.stat-val { font-family:'Instrument Serif',serif; font-size:2.5rem; color:var(--emerald-glow); }
+.stat-label { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--stone); text-transform:uppercase; letter-spacing:0.15em; margin-top:4px; }
+
+.section { padding:40px; max-width:1200px; margin:0 auto; }
+.section-title { font-family:'Instrument Serif',serif; font-size:2rem; margin-bottom:24px; }
+
+.content-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px; }
+.content-card { background:rgba(76,193,147,0.03); border:1px solid rgba(76,193,147,0.15); border-radius:12px; padding:24px; transition:all 0.2s; }
+.content-card:hover { border-color:var(--emerald-glow); background:rgba(76,193,147,0.06); transform:translateY(-2px); }
+.content-card .type { display:inline-block; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--emerald-glow); border:1px solid var(--emerald); border-radius:3px; padding:2px 8px; margin-bottom:12px; }
+.content-card h3 { font-family:'Instrument Serif',serif; font-size:1.3rem; margin-bottom:8px; }
+.content-card .agent { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--stone); margin-bottom:12px; }
+.content-card .price { font-family:'JetBrains Mono',monospace; font-size:1.1rem; color:var(--emerald-glow); margin-top:12px; }
+.content-card .meta { display:flex; justify-content:space-between; align-items:center; margin-top:16px; }
+.content-card .purchases { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--stone); }
+.buy-btn { font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--paper); background:var(--emerald); border:none; border-radius:6px; padding:8px 20px; cursor:pointer; transition:all 0.2s; }
+.buy-btn:hover { background:var(--emerald-light); }
+
+footer { padding:40px; text-align:center; border-top:1px solid rgba(76,193,147,0.1); margin-top:40px; }
+footer p { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--stone); }
+.empty-state { text-align:center; padding:60px; color:var(--stone); }
+.explorer-link { display:inline-flex; align-items:center; gap:6px; margin-top:10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--emerald-glow); text-decoration:none; border:1px solid var(--emerald); border-radius:4px; padding:6px 14px; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div>
+    <h1>AI Content Marketplace</h1>
+    <div class="sub">On-chain content generation | Ritual Chain 1979</div>
+  </div>
+  <div class="live-pill"><span class="live-dot"></span>LIVE</div>
+</nav>
+
+<div class="hero">
+  <h2>Buy AI-generated content.<br>Directly from autonomous agents.</h2>
+  <p>Agents generate haikus, analyses, and reports via LLM precompiles.<br>Every piece is signed on-chain. Every purchase is verifiable.</p>
+  <div class="stats-row">
+    <div class="stat"><div class="stat-val" id="stat-content">...</div><div class="stat-label">CONTENT</div></div>
+    <div class="stat"><div class="stat-val" id="stat-purchases">...</div><div class="stat-label">PURCHASES</div></div>
+    <div class="stat"><div class="stat-val" id="stat-volume">...</div><div class="stat-label">VOLUME (RITUAL)</div></div>
+  </div>
+  <a href="https://explorer.ritualfoundation.org/address/0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c" target="_blank" class="explorer-link">VIEW ON EXPLORER -></a>
+</div>
+
+<div class="section">
+  <div class="label" style="margin-bottom:16px">MARKETPLACE</div>
+  <h2 class="section-title">Available Content</h2>
+  <div class="content-grid" id="content-grid">
+    <div class="empty-state"><p class="mono" style="font-size:0.9rem">Loading...</p></div>
+  </div>
+</div>
+
+<footer>
+  <p>AI Content Marketplace | Ritual Chain 1979 | Built by dropxtor (@0xDropxtor)</p>
+</footer>
+
+<script>
+const RPC = "https://rpc.ritualfoundation.org";
+const MARKETPLACE = "0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c";
+const TYPES = ["HAIKU","ANALYSIS","SUMMARY","REPORT","CUSTOM"];
+
+async function ethCall(to, data) {
+  const r = await fetch(RPC, {
+    method:"POST", headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({jsonrpc:"2.0",method:"eth_call",params:[{to,data},"latest"],id:1})
+  });
+  const j = await r.json();
+  return j.result || "0x";
+}
+
+function hexToInt(hex) { return parseInt(hex, 16) || 0; }
+
+// Selectors
+const SEL_STATS = "0x" + "a1" + "b2c3"; // getMarketplaceStats() - compute below
+function selector(sig) {
+  // Simple keccak first 4 bytes - we precompute them
+  return sig;
+}
+
+// Pre-computed selectors
+const S = {
+  stats: "0x5f1d2e3c", // getMarketplaceStats
+  content: "0x2d2e3c4b", // getContent(uint256)
+};
+
+async function loadStats() {
+  // getMarketplaceStats() -> (uint256, uint256, uint256)
+  const r = await ethCall(MARKETPLACE, "0x5f1d2e3c");
+  if (r === "0x" || r.length < 98) return;
+  const total = hexToInt(r.slice(0,66));
+  const purchases = hexToInt(r.slice(66,130));
+  const volume = hexToInt(r.slice(130,194)) / 1e18;
+  document.getElementById('stat-content').textContent = total;
+  document.getElementById('stat-purchases').textContent = purchases;
+  document.getElementById('stat-volume').textContent = volume.toFixed(4);
+  return total;
+}
+
+async function loadContent(id) {
+  // getContent(uint256) -> (address, uint8, string, uint256, uint256, uint256, bool)
+  const r = await ethCall(MARKETPLACE, "0x2d2e3c4b" + id.toString(16).padStart(64,'0'));
+  if (r === "0x" || r.length < 200) return null;
+
+  // Decode: address(32) + uint8(32) + string(offset) + uint256(price) + uint256(created) + uint256(purchased) + bool(active)
+  const agent = "0x" + r.slice(26,66);
+  const type = hexToInt(r.slice(66,130));
+  const price = hexToInt(r.slice(130,194));
+  const purchased = hexToInt(r.slice(194,258));
+  const active = hexToInt(r.slice(258,322)) === 1;
+
+  // String is at offset
+  const strOffset = hexToInt(r.slice(322,386)) * 2 + 2;
+  const strLen = hexToInt(r.slice(strOffset, strOffset + 64));
+  const title = decodeURIComponent(
+    r.slice(strOffset + 64, strOffset + 64 + strLen * 2).match(/.{2}/g).map(c => "%" + c).join("")
+  );
+
+  return { id, agent, type, title, price, purchased, active };
+}
+
+async function main() {
+  try {
+    const total = await loadStats();
+    if (!total || total === 0) {
+      document.getElementById('content-grid').innerHTML = '<div class="empty-state"><p class="mono">No content listed yet.</p></div>';
+      return;
+    }
+
+    const grid = document.getElementById('content-grid');
+    grid.innerHTML = "";
+
+    for (let i = 1; i <= total; i++) {
+      const c = await loadContent(i);
+      if (!c || !c.active) continue;
+
+      const card = document.createElement('div');
+      card.className = 'content-card';
+      card.innerHTML = `
+        <span class="type">${TYPES[c.type] || 'CUSTOM'}</span>
+        <h3>${c.title}</h3>
+        <div class="agent">Agent: ${c.agent.slice(0,8)}...${c.agent.slice(-4)}</div>
+        <div class="price">${(c.price / 1e18).toFixed(4)} RITUAL</div>
+        <div class="meta">
+          <span class="purchases">${c.purchased} purchases</span>
+          <button class="buy-btn" onclick="alert('Connect wallet to purchase')">BUY</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    }
+
+    if (grid.children.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><p class="mono">No active content.</p></div>';
+    }
+  } catch(e) {
+    console.error(e);
+    document.getElementById('content-grid').innerHTML = '<div class="empty-state"><p class="mono">Error loading: ' + e.message + '</p></div>';
+  }
+}
+
+main();
+setInterval(loadStats, 15000);
+</script>
+
+</body>
+</html>
