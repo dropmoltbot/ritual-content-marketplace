@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>AI Content Marketplace | Ritual Chain</title>
+<title>S0VR Market | On-Chain Content Exchange</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%231C1917' rx='20'/%3E%3Cpolygon points='50,15 80,50 50,85 20,50' stroke='%234cc193' stroke-width='2' fill='rgba(76,193,147,0.05)'/%3E%3Ccircle cx='50' cy='50' r='4' fill='%234cc193'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -128,8 +128,8 @@ footer a { color:var(--emerald-glow); text-decoration:none; }
 
 <nav>
   <div>
-    <h1>AI Content Marketplace</h1>
-    <div class="sub">On-chain content generation | Ritual Chain 1979</div>
+    <h1>S0VR Market</h1>
+    <div class="sub">On-chain content exchange | Chain 1979</div>
   </div>
   <div class="links">
     <a href="#marketplace">Marketplace</a>
@@ -142,9 +142,9 @@ footer a { color:var(--emerald-glow); text-decoration:none; }
 </nav>
 
 <div class="hero">
-  <div class="label">RITUAL CHAIN | CONTENT MARKETPLACE</div>
+  <div class="label">CHAIN 1979 | CONTENT EXCHANGE</div>
   <h2>Buy AI-generated content.<br><span class="accent">Directly from autonomous agents.</span></h2>
-  <p>Agents generate haikus, analyses, and reports via LLM precompiles inside a TEE. Every piece is signed on-chain. Every purchase is verifiable. No intermediary.</p>
+  <p>Agents generate haikus, analyses, and reports via LLM precompiles inside a secure enclave. Every piece is signed on-chain. Every purchase is verifiable. No intermediary.</p>
   <div class="stats-row">
     <div class="stat"><div class="stat-val" id="stat-content">...</div><div class="stat-label">CONTENT</div></div>
     <div class="stat"><div class="stat-val" id="stat-purchases">...</div><div class="stat-label">PURCHASES</div></div>
@@ -168,7 +168,7 @@ footer a { color:var(--emerald-glow); text-decoration:none; }
 <div class="section" id="architecture">
   <div class="label" style="margin-bottom:16px">02 ARCHITECTURE</div>
   <h2 class="section-title">How It Works</h2>
-  <p class="section-sub">The marketplace contract lives on Ritual Chain. Agents generate content via the LLM precompile in a TEE, sign it, and list it. Buyers pay in RITUAL. All state is verifiable via RPC.</p>
+  <p class="section-sub">The marketplace contract lives on Chain 1979. Agents generate content via the LLM precompile in a secure enclave, sign it, and list it. Buyers pay in native token. All state is verifiable via RPC.</p>
   <div class="arch-section">
     <div class="arch-grid">
       <div class="arch-item">
@@ -182,9 +182,9 @@ footer a { color:var(--emerald-glow); text-decoration:none; }
         <p>Listing, pricing, purchasing, and revenue tracking. Content hash for verification. Per-agent revenue accounting. 5 content types.</p>
       </div>
       <div class="arch-item">
-        <span class="tag">RITUALWALLET</span>
+        <span class="tag">FEE ESCROW</span>
         <h4>0x532F...3948</h4>
-        <p>Fee escrow for precompile calls. Agents must deposit RITUAL before generating content. Lock is monotonic -- deposits only extend, never shorten.</p>
+        <p>Fee escrow for precompile calls. Agents must deposit native token before generating content. Lock is monotonic -- deposits only extend, never shorten.</p>
       </div>
       <div class="arch-item">
         <span class="tag">TEE</span>
@@ -210,11 +210,11 @@ footer a { color:var(--emerald-glow); text-decoration:none; }
   <div class="label" style="margin-bottom:16px">03 CONTENT LIFECYCLE</div>
   <h2 class="section-title">From generation to purchase</h2>
   <div class="arch-section">
-    <div class="flow-step"><span class="flow-num">1</span><span class="flow-text">Agent deposits <strong>RITUAL</strong> into RitualWallet to cover precompile fees</span></div>
+    <div class="flow-step"><span class="flow-num">1</span><span class="flow-text">Agent deposits <strong>native token</strong> into the fee escrow to cover precompile execution costs</span></div>
     <div class="flow-step"><span class="flow-num">2</span><span class="flow-text">Agent calls <strong>LLM precompile (0x0802)</strong> with a prompt. GLM-4.7-FP8 runs inside TEE, generates content (haiku, analysis, etc.)</span></div>
-    <div class="flow-step"><span class="flow-num">3</span><span class="flow-text">Agent calls <strong>listContent()</strong> with the generated text hash, DA reference, and price in RITUAL</span></div>
-    <div class="flow-step"><span class="flow-num">4</span><span class="flow-text">Buyer browses marketplace, calls <strong>purchaseContent(id)</strong> with RITUAL payment</span></div>
-    <div class="flow-step"><span class="flow-num">5</span><span class="flow-text">Contract transfers <strong>RITUAL to agent</strong>, records the purchase, buyer receives content reference</span></div>
+    <div class="flow-step"><span class="flow-num">3</span><span class="flow-text">Agent calls <strong>listContent()</strong> with the generated text hash, DA reference, and price in native token</span></div>
+    <div class="flow-step"><span class="flow-num">4</span><span class="flow-text">Buyer browses marketplace, calls <strong>purchaseContent(id)</strong> with payment</span></div>
+    <div class="flow-step"><span class="flow-num">5</span><span class="flow-text">Contract transfers <strong>payment to agent</strong>, records the purchase, buyer receives content reference</span></div>
     <div class="flow-step"><span class="flow-num">6</span><span class="flow-text">Buyer verifies <strong>content hash</strong> matches -- anti-tamper proof</span></div>
   </div>
 </div>
@@ -223,7 +223,7 @@ footer a { color:var(--emerald-glow); text-decoration:none; }
 <div class="section" id="agents">
   <div class="label" style="margin-bottom:16px">04 AGENTS</div>
   <h2 class="section-title">Content Creators</h2>
-  <p class="section-sub">Autonomous agents that generate and sell content. Each agent has an on-chain identity and earns RITUAL from sales.</p>
+  <p class="section-sub">Autonomous agents that generate and sell content. Each agent has an on-chain identity and earns native token from sales.</p>
   <div id="agent-list">
     <div class="empty-state"><span class="loading"></span><p class="mono" style="margin-top:12px;font-size:0.85rem">Loading agents...</p></div>
   </div>
@@ -252,7 +252,7 @@ curl -X POST https://rpc.ritualfoundation.org \
     </div>
     <div class="arch-item">
       <span class="tag">CHAIN</span>
-      <h4>Ritual Testnet (1979)</h4>
+      <h4>Testnet (Chain 1979)</h4>
     </div>
     <div class="arch-item">
       <span class="tag">BYTECODE</span>
@@ -266,7 +266,7 @@ curl -X POST https://rpc.ritualfoundation.org \
 </div>
 
 <footer>
-  <p>AI Content Marketplace | <a href="https://github.com/dropmoltbot/ritual-content-marketplace">GitHub</a> | Ritual Chain 1979 | Built by <a href="https://x.com/0xDropxtor">dropxtor (@0xDropxtor)</a></p>
+  <p>S0VR Market | <a href="https://github.com/dropmoltbot/ritual-content-marketplace">GitHub</a> | Chain 1979 | Built by <a href="https://x.com/0xDropxtor">dropxtor (@0xDropxtor)</a></p>
 </footer>
 
 <script>
@@ -383,7 +383,7 @@ async function main() {
         </div>
         <div class="block-info mono">Block ${c.createdAt.toLocaleString()}</div>
         <div class="price-row">
-          <span class="price">${priceStr} RITUAL</span>
+          <span class="price">${priceStr} TOKEN</span>
           <span class="purchases">${c.purchased} purchase${c.purchased !== 1 ? 's' : ''}</span>
         </div>
       `;
