@@ -354,7 +354,6 @@ async function main() {
       document.getElementById('content-grid').innerHTML = '<div class="empty-state"><p class="mono">No content listed yet.</p></div>';
       return;
     }
-    document.getElementById('stat-agents').textContent = '1';
 
     // Load all content
     const grid = document.getElementById('content-grid');
@@ -420,6 +419,7 @@ async function main() {
     if (grid.children.length === 0) {
       grid.innerHTML = '<div class="empty-state"><p class="mono">No active content.</p></div>';
     }
+    document.getElementById('stat-agents').textContent = agents.size;
   } catch(e) {
     console.error(e);
     document.getElementById('content-grid').innerHTML = '<div class="empty-state"><p class="mono">Error: ' + e.message + '</p></div>';
