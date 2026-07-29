@@ -289,11 +289,17 @@ async function ethCall(to, data) {
 
 function h2i(hex) { try { return BigInt(hex).toString(); } catch { return "0"; } }
 
-function decodeString(hex, offset) {
-  // offset is in hex chars from start of data (after 0x)
-  const strOffset = Number(BigInt("0x" + hex.slice(offset, offset+64))) * 2 + 2;
-  const strLen = Number(BigInt("0x" + hex.slice(strOffset, strOffset+64)));
-  const strHex = hex.slice(strOffset+64, strOffset+64+strLen*2);
+function slot(hex, index) {
+  // Extract 32-byte slot at word index from a hex string that starts with 0x
+  const start = 2 + index * 64;
+  return "0x" + hex.slice(start, start + 64);
+}
+
+function decodeString(hex, wordOffset) {
+  // wordOffset is the index of the word containing the string offset
+  const dataOffset = Number(BigInt(slot(hex, wordOffset))) * 2 + 2;
+  const strLen = Number(BigInt("0x" + hex.slice(dataOffset, dataOffset+64)));
+  const strHex = hex.slice(dataOffset+64, dataOffset+64+strLen*2);
   let str = "";
   for (let i = 0; i < strHex.length; i += 2) {
     str += String.fromCharCode(parseInt(strHex.slice(i,i+2),16));
@@ -303,10 +309,10 @@ function decodeString(hex, offset) {
 
 async function loadStats() {
   const r = await ethCall(MARKETPLACE, SEL_STATS);
-  if (r.length < 194) return null;
-  const total = h2i("0x" + r.slice(0,66));
-  const purchases = h2i("0x" + r.slice(66,130));
-  const volume = BigInt(h2i("0x" + r.slice(130,194)));
+  if (r === "0x" || r.length < 194) return null;
+  const total = h2i(slot(r, 0));
+  const purchases = h2i(slot(r, 1));
+  const volume = BigInt(h2i(slot(r, 2)));
   document.getElementById('stat-content').textContent = total;
   document.getElementById('stat-purchases').textContent = purchases;
   document.getElementById('stat-volume').textContent = (Number(volume) / 1e18).toFixed(4);
@@ -318,13 +324,16 @@ async function loadContent(id) {
   const r = await ethCall(MARKETPLACE, data);
   if (r === "0x" || r.length < 322) return null;
 
-  const agent = "0x" + r.slice(26,66);
-  const type = parseInt(r.slice(66,130), 16) || 0;
-  const price = BigInt(h2i("0x" + r.slice(130,194)));
-  const createdAt = parseInt(r.slice(194,258), 16) || 0;
-  const purchased = parseInt(r.slice(258,322), 16) || 0;
-  const active = parseInt(r.slice(322,386), 16) === 1;
-  const title = decodeString(r, 386);
+  // getContent returns: (address agent, uint8 type, string title, uint256 price, uint256 createdAt, uint256 purchased, bool active)
+  // ABI encoding: address(32) + uint8(32) + string_offset(32) + price(32) + createdAt(32) + purchased(32) + active(32) + string_data...
+  const agent = "0x" + r.slice(2 + 12*2, 2 + 32*2);  // address is right-padded in 32 bytes
+  const type = parseInt(slot(r, 1), 16) || 0;
+  const price = BigInt(h2i(slot(r, 3)));
+  const createdAt = parseInt(slot(r, 4), 16) || 0;
+  const purchased = parseInt(slot(r, 5), 16) || 0;
+  const active = parseInt(slot(r, 6), 16) === 1;
+  // String offset is at word index 2
+  const title = decodeString(r, 2);
 
   return { id, agent, type, title, price: Number(price), createdAt, purchased, active };
 }
@@ -332,9 +341,9 @@ async function loadContent(id) {
 async function loadAgentStats(addr) {
   const addrPadded = addr.toLowerCase().slice(2).padStart(64,'0');
   const countR = await ethCall(MARKETPLACE, SEL_AGENT_COUNT + addrPadded);
-  const count = parseInt(countR.slice(0,66), 16) || 0;
+  const count = parseInt(slot(countR, 0), 16) || 0;
   const revR = await ethCall(MARKETPLACE, SEL_AGENT_REVENUE + addrPadded);
-  const rev = BigInt(h2i("0x" + revR.slice(0,66)));
+  const rev = BigInt(h2i(slot(revR, 0)));
   return { count, revenue: Number(rev) };
 }
 
