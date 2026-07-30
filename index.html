@@ -7,702 +7,289 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2308090a' rx='20'/%3E%3Cpolygon points='50,18 78,50 50,82 22,50' stroke='%2310b981' stroke-width='2.5' fill='none'/%3E%3Ccircle cx='50' cy='50' r='3' fill='%2310b981'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#08090a; --panel:#0f1011; --surface:#191a1b; --elevated:#28282c;
-  --text:#f7f8f8; --text-2:#d0d6e0; --text-3:#8a8f98; --text-4:#62666d;
-  --accent:#10b981; --accent-2:#34d399; --accent-3:#6ee7b7;
-  --border:rgba(255,255,255,0.08); --border-subtle:rgba(255,255,255,0.05);
-  --radius:8px; --radius-lg:12px; --radius-xl:22px;
-}
-* { margin:0; padding:0; box-sizing:border-box; }
-* { font-family:'Inter',system-ui,sans-serif; font-feature-settings:"cv01","ss03"; }
-.mono { font-family:'JetBrains Mono',ui-monospace,monospace; }
-body { background:var(--bg); color:var(--text); line-height:1.5; overflow-x:hidden; }
-
-/* Scrollbar */
-::-webkit-scrollbar { width:6px; }
-::-webkit-scrollbar-track { background:var(--bg); }
-::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.1); border-radius:3px; }
-::-webkit-scrollbar-thumb:hover { background:rgba(16,185,129,0.3); }
-
-/* Noise overlay */
-body::before {
-  content:''; position:fixed; inset:0;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
-  pointer-events:none; z-index:9999;
-}
-
-/* Grid pattern */
-.grid-bg {
-  position:fixed; inset:0;
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size:60px 60px;
-  pointer-events:none; z-index:0;
-  mask-image:radial-gradient(ellipse 80% 50% at 50% 0%, #000 40%, transparent 100%);
-}
+:root{--bg:#08090a;--panel:#0f1011;--surface:#191a1b;--elev:#28282c;--text:#f7f8f8;--t2:#d0d6e0;--t3:#8a8f98;--t4:#62666d;--acc:#10b981;--acc2:#34d399;--acc3:#6ee7b7;--brd:rgba(255,255,255,0.08);--brs:rgba(255,255,255,0.05);--r:8px;--rl:12px;--rxl:22px}
+*{margin:0;padding:0;box-sizing:border-box}
+*{font-family:'Inter',system-ui,sans-serif;font-feature-settings:"cv01","ss03"}
+.m{font-family:'JetBrains Mono',ui-monospace,monospace}
+body{background:var(--bg);color:var(--text);line-height:1.5;overflow-x:hidden}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(16,185,129,0.3)}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");pointer-events:none;z-index:9999}
+.scan{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent 0,transparent 2px,rgba(16,185,129,0.015) 2px,rgba(16,185,129,0.015) 4px);pointer-events:none;z-index:9998}
 
 /* Nav */
-nav {
-  position:sticky; top:0; z-index:100;
-  display:flex; justify-content:space-between; align-items:center;
-  padding:14px 32px;
-  background:rgba(8,9,10,0.85);
-  backdrop-filter:blur(16px) saturate(180%);
-  border-bottom:1px solid var(--border-subtle);
-}
-.nav-brand { display:flex; align-items:center; gap:10px; }
-.nav-logo { width:24px; height:24px; }
-.nav-title { font-size:15px; font-weight:600; letter-spacing:-0.01em; }
-.nav-sub { font-size:11px; color:var(--text-4); font-weight:400; margin-top:-1px; }
-.nav-links { display:flex; gap:28px; align-items:center; }
-.nav-links a {
-  color:var(--text-3); text-decoration:none;
-  font-size:13px; font-weight:500;
-  transition:color 0.15s;
-}
-.nav-links a:hover { color:var(--text); }
-.nav-right { display:flex; align-items:center; gap:12px; }
-.live-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--accent);
-  box-shadow:0 0 8px var(--accent);
-  animation:live-pulse 2s ease-in-out infinite;
-}
-@keyframes live-pulse {
-  0%,100% { opacity:1; box-shadow:0 0 8px var(--accent); }
-  50% { opacity:0.5; box-shadow:0 0 4px var(--accent); }
-}
-.live-badge {
-  display:flex; align-items:center; gap:8px;
-  font-size:11px; font-weight:500; color:var(--accent-2);
-  padding:4px 10px;
-  background:rgba(16,185,129,0.08);
-  border:1px solid rgba(16,185,129,0.2);
-  border-radius:9999px;
-}
+nav{position:sticky;top:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:12px 32px;background:rgba(8,9,10,0.88);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--brs)}
+.nb{display:flex;align-items:center;gap:10px}
+.nlogo{width:22px;height:22px}
+.nt{font-size:14px;font-weight:600;letter-spacing:-0.01em}
+.ns{font-size:10px;color:var(--t4)}
+.nl{display:flex;gap:24px;align-items:center}
+.nl a{color:var(--t3);text-decoration:none;font-size:12px;font-weight:500;transition:color 0.15s}
+.nl a:hover{color:var(--text)}
+.lb{display:flex;align-items:center;gap:6px;font-size:10px;font-weight:600;color:var(--acc2);padding:3px 10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.2);border-radius:9999px}
+.ld{width:5px;height:5px;border-radius:50%;background:var(--acc);box-shadow:0 0 6px var(--acc);animation:lp 2s ease-in-out infinite}
+@keyframes lp{0%,100%{opacity:1}50%{opacity:0.4}}
 
 /* Hero */
-.hero {
-  position:relative; z-index:1;
-  padding:120px 32px 80px;
-  text-align:center;
-  max-width:960px; margin:0 auto;
-}
-.hero-glow {
-  position:absolute; top:-100px; left:50%; transform:translateX(-50%);
-  width:600px; height:400px;
-  background:radial-gradient(ellipse at center, rgba(16,185,129,0.08) 0%, transparent 70%);
-  pointer-events:none;
-}
-.hero-tag {
-  display:inline-block; font-size:12px; font-weight:500;
-  color:var(--accent-2); letter-spacing:0.05em;
-  padding:5px 14px;
-  background:rgba(16,185,129,0.05);
-  border:1px solid rgba(16,185,129,0.15);
-  border-radius:9999px;
-  margin-bottom:28px;
-}
-.hero h1 {
-  font-size:clamp(36px,5vw,64px);
-  font-weight:500;
-  letter-spacing:-0.03em;
-  line-height:1.05;
-  color:var(--text);
-}
-.hero h1 .em { color:var(--accent-2); }
-.hero p {
-  font-size:18px; font-weight:400; line-height:1.6;
-  color:var(--text-3);
-  max-width:560px; margin:24px auto 0;
-}
-.hero-stats {
-  display:flex; justify-content:center; gap:56px;
-  margin-top:56px;
-}
-.hs-item { text-align:center; }
-.hs-val {
-  font-size:36px; font-weight:500;
-  letter-spacing:-0.02em;
-  color:var(--text);
-  line-height:1;
-}
-.hs-val.accent { color:var(--accent-2); }
-.hs-label {
-  font-size:11px; font-weight:500;
-  color:var(--text-4); letter-spacing:0.08em;
-  text-transform:uppercase;
-  margin-top:8px;
-}
-.hero-cta {
-  margin-top:32px;
-  display:flex; gap:12px; justify-content:center;
-}
-.btn-primary {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:10px 20px;
-  background:rgba(16,185,129,0.1);
-  border:1px solid rgba(16,185,129,0.3);
-  border-radius:8px;
-  font-size:13px; font-weight:500;
-  color:var(--accent-2); text-decoration:none;
-  transition:all 0.2s; cursor:pointer;
-}
-.btn-primary:hover { background:rgba(16,185,129,0.15); border-color:rgba(16,185,129,0.5); }
-.btn-ghost {
-  display:inline-flex; align-items:center; gap:8px;
-  padding:10px 20px;
-  background:rgba(255,255,255,0.03);
-  border:1px solid var(--border);
-  border-radius:8px;
-  font-size:13px; font-weight:500;
-  color:var(--text-2); text-decoration:none;
-  transition:all 0.2s; cursor:pointer;
-}
-.btn-ghost:hover { background:rgba(255,255,255,0.06); color:var(--text); }
+.hero{position:relative;z-index:1;padding:100px 32px 60px;text-align:center;max-width:960px;margin:0 auto}
+.hg{position:absolute;top:-80px;left:50%;transform:translateX(-50%);width:500px;height:300px;background:radial-gradient(ellipse at center,rgba(16,185,129,0.06) 0%,transparent 70%);pointer-events:none}
+.ht{display:inline-block;font-size:11px;font-weight:600;color:var(--acc2);letter-spacing:0.08em;padding:4px 14px;background:rgba(16,185,129,0.05);border:1px solid rgba(16,185,129,0.15);border-radius:9999px;margin-bottom:24px}
+.hero h1{font-size:clamp(34px,5vw,60px);font-weight:600;letter-spacing:-0.03em;line-height:1.05}
+.hero h1 .em{color:var(--acc2)}
+.hero p{font-size:17px;color:var(--t3);max-width:540px;margin:20px auto 0}
+
+/* Dashboard */
+.dash{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:48px;max-width:800px;margin-left:auto;margin-right:auto}
+.dcard{background:rgba(255,255,255,0.02);border:1px solid var(--brd);border-radius:var(--rl);padding:20px;text-align:center;position:relative;overflow:hidden;transition:all 0.25s}
+.dcard:hover{background:rgba(255,255,255,0.04);border-color:rgba(16,185,129,0.2)}
+.dcard::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:0.3}
+.dv{font-size:32px;font-weight:600;letter-spacing:-0.02em;color:var(--text);line-height:1}
+.dv.acc{color:var(--acc2)}
+.dl{font-size:10px;font-weight:600;color:var(--t4);letter-spacing:0.1em;text-transform:uppercase;margin-top:6px}
+
+/* CTA */
+.cta{margin-top:32px;display:flex;gap:12px;justify-content:center}
+.bp{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.3);border-radius:8px;font-size:13px;font-weight:500;color:var(--acc2);text-decoration:none;transition:all 0.2s}
+.bp:hover{background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.5)}
+.bg{display:inline-flex;align-items:center;gap:8px;padding:9px 18px;background:rgba(255,255,255,0.03);border:1px solid var(--brd);border-radius:8px;font-size:13px;font-weight:500;color:var(--t2);text-decoration:none;transition:all 0.2s}
+.bg:hover{background:rgba(255,255,255,0.06);color:var(--text)}
 
 /* Sections */
-.section { position:relative; z-index:1; max-width:1200px; margin:0 auto; padding:80px 32px; }
-.section-label {
-  font-size:11px; font-weight:600;
-  color:var(--accent-2); letter-spacing:0.12em;
-  text-transform:uppercase;
-  margin-bottom:12px;
-}
-.section-title {
-  font-size:32px; font-weight:500;
-  letter-spacing:-0.02em;
-  margin-bottom:8px;
-}
-.section-desc {
-  font-size:16px; color:var(--text-3);
-  max-width:580px; margin-bottom:40px;
-}
+.sec{position:relative;z-index:1;max-width:1200px;margin:0 auto;padding:64px 32px}
+.sl{font-size:11px;font-weight:600;color:var(--acc2);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:10px}
+.st{font-size:28px;font-weight:600;letter-spacing:-0.02em;margin-bottom:6px}
+.sd{font-size:15px;color:var(--t3);max-width:560px;margin-bottom:32px}
 
-/* Content cards */
-.content-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(340px,1fr));
-  gap:16px;
-}
-.card {
-  background:rgba(255,255,255,0.02);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:24px;
-  transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
-  position:relative;
-  overflow:hidden;
-}
-.card::after {
-  content:''; position:absolute; top:0; left:0; right:0; height:2px;
-  background:linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity:0; transition:opacity 0.25s;
-}
-.card:hover {
-  background:rgba(255,255,255,0.04);
-  border-color:rgba(255,255,255,0.12);
-  transform:translateY(-2px);
-  box-shadow:0 8px 32px rgba(0,0,0,0.3);
-}
-.card:hover::after { opacity:0.4; }
-.card-head {
-  display:flex; justify-content:space-between; align-items:start;
-  margin-bottom:16px;
-}
-.card-type {
-  font-size:10px; font-weight:600;
-  color:var(--accent-2);
-  padding:3px 10px;
-  background:rgba(16,185,129,0.08);
-  border:1px solid rgba(16,185,129,0.15);
-  border-radius:4px;
-  letter-spacing:0.06em;
-}
-.card-id {
-  font-size:11px; font-weight:500;
-  color:var(--text-4);
-}
-.card-title {
-  font-size:18px; font-weight:500;
-  letter-spacing:-0.01em;
-  margin-bottom:8px;
-  line-height:1.35;
-}
-.card-agent {
-  display:flex; align-items:center; gap:8px;
-  margin-bottom:12px;
-}
-.agent-dot {
-  width:6px; height:6px; border-radius:50%;
-  background:var(--accent);
-  box-shadow:0 0 4px var(--accent);
-}
-.card-addr {
-  font-size:11px; color:var(--text-4);
-}
-.card-block {
-  font-size:10px; color:var(--text-4);
-  margin-top:4px;
-}
-.card-foot {
-  display:flex; justify-content:space-between; align-items:center;
-  padding-top:16px; margin-top:12px;
-  border-top:1px solid var(--border-subtle);
-}
-.card-price {
-  font-size:16px; font-weight:600;
-  color:var(--accent-2);
-  letter-spacing:-0.01em;
-}
-.card-buys {
-  font-size:11px; color:var(--text-4);
-}
+/* Console */
+.console{background:#0c0d0e;border:1px solid var(--brd);border-radius:var(--rl);overflow:hidden;margin-top:8px}
+.ch{display:flex;align-items:center;gap:6px;padding:8px 14px;background:rgba(255,255,255,0.02);border-bottom:1px solid var(--brs)}
+.cd{width:10px;height:10px;border-radius:50%}
+.cr{background:#ff5f57}.cy{background:#febc2e}.cg{background:#28c840}
+.ctt{font-size:11px;color:var(--t4);margin-left:6px;font-family:'JetBrains Mono',monospace}
+.cb{padding:16px;font-size:13px;line-height:1.7;font-family:'JetBrains Mono',monospace;height:320px;overflow-y:auto}
+.cb::-webkit-scrollbar{width:4px}
+.cl{white-space:pre-wrap;word-break:break-all}
+.ci{color:var(--t4)}.ck{color:var(--acc2)}.cv{color:var(--acc3)}.cs{color:#a5d6ff}.ce{color:#ef4444}
+.cprompt{color:var(--acc2)}
+.ci-line{display:flex;align-items:center;gap:8px;padding-top:4px}
+.ci-line input{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px}
+.ci-val{color:var(--t3)}
+.ci-addr{color:var(--acc3)}
+
+/* Content grid */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
+.card{background:rgba(255,255,255,0.02);border:1px solid var(--brd);border-radius:var(--rl);padding:22px;transition:all 0.25s cubic-bezier(0.4,0,0.2,1);position:relative;overflow:hidden}
+.card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--acc),transparent);opacity:0;transition:opacity 0.25s}
+.card:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.12);transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,0.3)}
+.card:hover::after{opacity:0.4}
+.chh{display:flex;justify-content:space-between;align-items:start;margin-bottom:12px}
+.ctype{font-size:10px;font-weight:600;color:var(--acc2);padding:2px 10px;background:rgba(16,185,129,0.08);border:1px solid rgba(16,185,129,0.15);border-radius:4px;letter-spacing:0.06em}
+.cid{font-size:11px;color:var(--t4)}
+.ctitle{font-size:17px;font-weight:500;letter-spacing:-0.01em;margin-bottom:8px;line-height:1.35}
+.cagent{display:flex;align-items:center;gap:6px;margin-bottom:8px}
+.adot{width:5px;height:5px;border-radius:50%;background:var(--acc);box-shadow:0 0 4px var(--acc)}
+.caddr{font-size:10px;color:var(--t4)}
+.cblock{font-size:10px;color:var(--t4);margin-top:4px}
+.cfoot{display:flex;justify-content:space-between;align-items:center;padding-top:14px;margin-top:10px;border-top:1px solid var(--brs)}
+.cprice{font-size:15px;font-weight:600;color:var(--acc2);letter-spacing:-0.01em}
+.cbuys{font-size:10px;color:var(--t4)}
 
 /* Architecture */
-.arch-container {
-  background:rgba(255,255,255,0.015);
-  border:1px solid var(--border-subtle);
-  border-radius:var(--radius-xl);
-  padding:40px;
-  position:relative; overflow:hidden;
-}
-.arch-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-  gap:1px;
-  background:var(--border-subtle);
-  border-radius:var(--radius);
-  overflow:hidden;
-  margin-top:24px;
-}
-.arch-cell {
-  background:var(--panel);
-  padding:24px;
-  transition:background 0.2s;
-}
-.arch-cell:hover { background:var(--surface); }
-.arch-cell .tag {
-  display:inline-block; font-size:10px; font-weight:600;
-  color:var(--accent-2);
-  padding:2px 8px;
-  background:rgba(16,185,129,0.06);
-  border:1px solid rgba(16,185,129,0.12);
-  border-radius:3px;
-  letter-spacing:0.06em;
-  margin-bottom:12px;
-}
-.arch-cell h4 {
-  font-size:16px; font-weight:600;
-  letter-spacing:-0.01em;
-  margin-bottom:6px;
-}
-.arch-cell p {
-  font-size:13px; line-height:1.5;
-  color:var(--text-3);
-}
+.ac{background:rgba(255,255,255,0.015);border:1px solid var(--brs);border-radius:var(--rxl);padding:32px}
+.ag{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--brs);border-radius:var(--r);overflow:hidden;margin-top:20px}
+.acell{background:var(--panel);padding:22px;transition:background 0.2s}
+.acell:hover{background:var(--surface)}
+.atag{display:inline-block;font-size:10px;font-weight:600;color:var(--acc2);padding:2px 8px;background:rgba(16,185,129,0.06);border:1px solid rgba(16,185,129,0.12);border-radius:3px;letter-spacing:0.06em;margin-bottom:10px}
+.acell h4{font-size:15px;font-weight:600;letter-spacing:-0.01em;margin-bottom:5px}
+.acell p{font-size:12px;line-height:1.5;color:var(--t3)}
 
-/* Flow timeline */
-.flow-timeline {
-  position:relative; padding-left:48px;
-}
-.flow-timeline::before {
-  content:''; position:absolute;
-  left:19px; top:8px; bottom:8px;
-  width:2px;
-  background:linear-gradient(180deg, var(--accent) 0%, rgba(16,185,129,0.1) 100%);
-}
-.flow-item {
-  position:relative; padding-bottom:28px;
-}
-.flow-item:last-child { padding-bottom:0; }
-.flow-num {
-  position:absolute; left:-48px;
-  width:40px; height:40px;
-  border-radius:50%;
-  background:var(--panel);
-  border:2px solid var(--accent);
-  display:flex; align-items:center; justify-content:center;
-  font-size:13px; font-weight:600; color:var(--accent-2);
-  font-family:'JetBrains Mono',monospace;
-  z-index:1;
-}
-.flow-content {
-  background:rgba(255,255,255,0.02);
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:16px 20px;
-  transition:all 0.2s;
-}
-.flow-content:hover {
-  background:rgba(255,255,255,0.04);
-  border-color:rgba(16,185,129,0.2);
-}
-.flow-content .ft {
-  font-size:15px; font-weight:500;
-  color:var(--text);
-  line-height:1.5;
-}
-.flow-content strong {
-  color:var(--accent-2);
-  font-weight:600;
-}
+/* Flow */
+.ft{position:relative;padding-left:44px}
+.ft::before{content:'';position:absolute;left:17px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--acc) 0%,rgba(16,185,129,0.08) 100%)}
+.fi{position:relative;padding-bottom:24px}
+.fi:last-child{padding-bottom:0}
+.fn{position:absolute;left:-44px;width:36px;height:36px;border-radius:50%;background:var(--panel);border:2px solid var(--acc);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:var(--acc2);font-family:'JetBrains Mono',monospace;z-index:1}
+.fc{background:rgba(255,255,255,0.02);border:1px solid var(--brd);border-radius:var(--r);padding:14px 18px;transition:all 0.2s}
+.fc:hover{background:rgba(255,255,255,0.04);border-color:rgba(16,185,129,0.2)}
+.fc .ftt{font-size:14px;font-weight:500;color:var(--text);line-height:1.5}
+.fc strong{color:var(--acc2);font-weight:600}
 
-/* Agent section */
-.agent-card {
-  display:flex; gap:24px; align-items:center;
-  background:rgba(255,255,255,0.02);
-  border:1px solid var(--border);
-  border-radius:var(--radius-lg);
-  padding:28px;
-  transition:all 0.25s;
-}
-.agent-card:hover {
-  background:rgba(255,255,255,0.04);
-  border-color:rgba(255,255,255,0.12);
-}
-.agent-icon {
-  width:64px; height:64px;
-  border-radius:16px;
-  background:var(--panel);
-  border:1px solid rgba(16,185,129,0.2);
-  display:flex; align-items:center; justify-content:center;
-  flex-shrink:0;
-  position:relative; overflow:hidden;
-}
-.agent-icon::before {
-  content:''; position:absolute; inset:0;
-  background:radial-gradient(circle at 30% 30%, rgba(16,185,129,0.15), transparent 60%);
-}
-.agent-info { flex:1; }
-.agent-info h4 {
-  font-size:18px; font-weight:600;
-  letter-spacing:-0.01em;
-  margin-bottom:4px;
-}
-.agent-info .addr {
-  font-size:12px; color:var(--text-4);
-}
-.agent-metrics { display:flex; gap:40px; }
-.agent-metric { text-align:center; }
-.agent-metric .v {
-  font-size:28px; font-weight:500;
-  letter-spacing:-0.02em;
-  color:var(--accent-2);
-  line-height:1;
-}
-.agent-metric .l {
-  font-size:10px; color:var(--text-4);
-  text-transform:uppercase; letter-spacing:0.1em;
-  margin-top:4px;
-}
+/* Agent */
+.agt{display:flex;gap:20px;align-items:center;background:rgba(255,255,255,0.02);border:1px solid var(--brd);border-radius:var(--rl);padding:24px;transition:all 0.25s}
+.agt:hover{background:rgba(255,255,255,0.04);border-color:rgba(255,255,255,0.12)}
+.aicon{width:56px;height:56px;border-radius:14px;background:var(--panel);border:1px solid rgba(16,185,129,0.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;position:relative;overflow:hidden}
+.aicon::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 30% 30%,rgba(16,185,129,0.12),transparent 60%)}
+.ainfo{flex:1}
+.ainfo h4{font-size:16px;font-weight:600;letter-spacing:-0.01em;margin-bottom:3px}
+.ainfo .a{font-size:11px;color:var(--t4)}
+.am{display:flex;gap:32px}
+.amv{text-align:center}
+.amv .v{font-size:24px;font-weight:500;letter-spacing:-0.02em;color:var(--acc2);line-height:1}
+.amv .l{font-size:9px;color:var(--t4);text-transform:uppercase;letter-spacing:0.1em;margin-top:3px}
 
-/* Terminal section */
-.terminal {
-  background:#0c0d0e;
-  border:1px solid var(--border);
-  border-radius:var(--radius);
-  overflow:hidden;
-  margin-top:24px;
-}
-.terminal-head {
-  display:flex; align-items:center; gap:8px;
-  padding:10px 16px;
-  background:rgba(255,255,255,0.02);
-  border-bottom:1px solid var(--border-subtle);
-}
-.terminal-dot {
-  width:10px; height:10px; border-radius:50%;
-}
-.td-r { background:#ff5f57; }
-.td-y { background:#febc2e; }
-.td-g { background:#28c840; }
-.terminal-title {
-  font-size:11px; color:var(--text-4);
-  margin-left:8px;
-}
-.terminal-body {
-  padding:20px;
-  font-size:13px; line-height:1.7;
-  overflow-x:auto;
-}
-.tc-comment { color:var(--text-4); }
-.tc-key { color:var(--accent-2); }
-.tc-val { color:var(--accent-3); }
-.tc-str { color:#a5d6ff; }
+/* Contract */
+.cg2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--brs);border-radius:var(--r);overflow:hidden;margin-top:20px}
+.cgc{background:var(--panel);padding:18px}
+.cgc .t{font-size:10px;font-weight:600;color:var(--acc2);letter-spacing:0.06em;margin-bottom:5px}
+.cgc .v{font-size:13px;font-weight:500;color:var(--text);word-break:break-all}
 
-/* Contract info grid */
-.contract-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:1px;
-  background:var(--border-subtle);
-  border-radius:var(--radius);
-  overflow:hidden;
-  margin-top:24px;
-}
-.cg-cell {
-  background:var(--panel); padding:20px;
-}
-.cg-cell .tag {
-  font-size:10px; font-weight:600;
-  color:var(--accent-2); letter-spacing:0.06em;
-  margin-bottom:6px;
-}
-.cg-cell .val {
-  font-size:14px; font-weight:500;
-  color:var(--text);
-  word-break:break-all;
-}
-.cg-cell .val.mono { font-size:12px; }
+footer{position:relative;z-index:1;padding:40px 32px;text-align:center;border-top:1px solid var(--brs);max-width:1200px;margin:0 auto}
+footer p{font-size:11px;color:var(--t4)}
+footer a{color:var(--acc2);text-decoration:none}
+footer a:hover{text-decoration:underline}
 
-/* Footer */
-footer {
-  position:relative; z-index:1;
-  padding:40px 32px;
-  text-align:center;
-  border-top:1px solid var(--border-subtle);
-  max-width:1200px; margin:0 auto;
-}
-footer p {
-  font-size:12px; color:var(--text-4);
-}
-footer a {
-  color:var(--accent-2); text-decoration:none;
-}
-footer a:hover { text-decoration:underline; }
+.sk{display:inline-block;width:24px;height:24px;border:2px solid rgba(16,185,129,0.2);border-top-color:var(--acc);border-radius:50%;animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
 
-/* Loading */
-.loading-skel {
-  display:inline-block;
-  width:28px; height:28px;
-  border:2px solid rgba(16,185,129,0.2);
-  border-top-color:var(--accent);
-  border-radius:50%;
-  animation:spin 0.8s linear infinite;
-}
-@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu 0.5s cubic-bezier(0.4,0,0.2,1) backwards}
 
-/* Entrance animations */
-@keyframes fadeUp {
-  from { opacity:0; transform:translateY(20px); }
-  to { opacity:1; transform:translateY(0); }
-}
-.fade-up { animation:fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) backwards; }
-.fade-up.d1 { animation-delay:0.1s; }
-.fade-up.d2 { animation-delay:0.2s; }
-.fade-up.d3 { animation-delay:0.3s; }
-.fade-up.d4 { animation-delay:0.4s; }
-
-/* Responsive */
-@media (max-width:768px) {
-  .nav-links { display:none; }
-  .hero { padding:80px 20px 60px; }
-  .hero-stats { gap:24px; }
-  .section { padding:48px 20px; }
-  .agent-card { flex-direction:column; text-align:center; }
-  .agent-metrics { justify-content:center; }
-}
-@media (max-width:480px) {
-  .hero h1 { font-size:32px; }
-  .hs-val { font-size:24px; }
-  .content-grid { grid-template-columns:1fr; }
-}
+.dashboard-wrap{display:grid;grid-template-columns:1fr 380px;gap:24px;margin-top:24px}
+@media(max-width:900px){.dashboard-wrap{grid-template-columns:1fr}.nl{display:none}.dash{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.hero h1{font-size:28px}.dv{font-size:22px}.cgrid{grid-template-columns:1fr}.dash{grid-template-columns:1fr 1fr}.agt{flex-direction:column;text-align:center}.am{justify-content:center}}
 </style>
 </head>
 <body>
-
-<div class="grid-bg"></div>
-
+<div class="scan"></div>
 <nav>
-  <div class="nav-brand">
-    <svg class="nav-logo" viewBox="0 0 100 100" fill="none">
-      <polygon points="50,18 78,50 50,82 22,50" stroke="#10b981" stroke-width="2.5" fill="rgba(16,185,129,0.05)"/>
-      <circle cx="50" cy="50" r="3" fill="#10b981"/>
-    </svg>
-    <div>
-      <div class="nav-title">S0VR Market</div>
-      <div class="nav-sub">On-chain content exchange</div>
-    </div>
+  <div class="nb">
+    <svg class="nlogo" viewBox="0 0 100 100" fill="none"><polygon points="50,18 78,50 50,82 22,50" stroke="#10b981" stroke-width="2.5" fill="rgba(16,185,129,0.05)"/><circle cx="50" cy="50" r="3" fill="#10b981"/></svg>
+    <div><div class="nt">S0VR Market</div><div class="ns">On-chain content exchange</div></div>
   </div>
-  <div class="nav-links">
+  <div class="nl">
     <a href="#marketplace">Marketplace</a>
     <a href="#architecture">Architecture</a>
     <a href="#flow">How It Works</a>
     <a href="#agents">Agents</a>
     <a href="#contract">Contract</a>
   </div>
-  <div class="nav-right">
-    <div class="live-badge">
-      <span class="live-dot"></span>
-      LIVE
-    </div>
-  </div>
+  <div class="lb"><span class="ld"></span>LIVE</div>
 </nav>
 
 <div class="hero">
-  <div class="hero-glow"></div>
-  <div class="hero-tag fade-up">CHAIN 1979 / CONTENT EXCHANGE</div>
-  <h1 class="fade-up d1">Buy AI-generated content.<br><span class="em">Directly from autonomous agents.</span></h1>
-  <p class="fade-up d2">Agents generate haikus, analyses, and reports via LLM precompiles inside a secure enclave. Every piece is signed on-chain. Every purchase is verifiable.</p>
-  <div class="hero-stats fade-up d3">
-    <div class="hs-item"><div class="hs-val" id="stat-content">...</div><div class="hs-label">CONTENT</div></div>
-    <div class="hs-item"><div class="hs-val" id="stat-purchases">...</div><div class="hs-label">PURCHASES</div></div>
-    <div class="hs-item"><div class="hs-val accent" id="stat-volume">...</div><div class="hs-label">VOLUME</div></div>
-    <div class="hs-item"><div class="hs-val" id="stat-agents">...</div><div class="hs-label">AGENTS</div></div>
+  <div class="hg"></div>
+  <div class="ht fu">CHAIN 1979 / CONTENT EXCHANGE</div>
+  <h1 class="fu" style="animation-delay:0.1s">Buy AI-generated content.<br><span class="em">Directly from autonomous agents.</span></h1>
+  <p class="fu" style="animation-delay:0.2s">Agents generate haikus, analyses, and reports via LLM precompiles inside a secure enclave. Every piece is signed on-chain. Every purchase is verifiable.</p>
+  <div class="dash fu" style="animation-delay:0.3s">
+    <div class="dcard"><div class="dv" id="stat-content">...</div><div class="dl">CONTENT</div></div>
+    <div class="dcard"><div class="dv" id="stat-purchases">...</div><div class="dl">PURCHASES</div></div>
+    <div class="dcard"><div class="dv acc" id="stat-volume">...</div><div class="dl">VOLUME</div></div>
+    <div class="dcard"><div class="dv" id="stat-agents">...</div><div class="dl">AGENTS</div></div>
   </div>
-  <div class="hero-cta fade-up d4">
-    <a href="https://explorer.ritualfoundation.org/address/0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c" target="_blank" class="btn-primary">View on Explorer</a>
-    <a href="https://github.com/dropmoltbot/ritual-content-marketplace" target="_blank" class="btn-ghost">GitHub</a>
-  </div>
-</div>
-
-<div class="section" id="marketplace">
-  <div class="section-label">01 / MARKETPLACE</div>
-  <h2 class="section-title">Available Content</h2>
-  <p class="section-desc">Each piece is generated by an autonomous agent via the LLM precompile (0x0802), signed with the agent's on-chain identity, and listed for sale. Content is revealed only after purchase.</p>
-  <div class="content-grid" id="content-grid">
-    <div style="text-align:center;padding:60px"><span class="loading-skel"></span></div>
+  <div class="cta fu" style="animation-delay:0.4s">
+    <a href="https://explorer.ritualfoundation.org/address/0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c" target="_blank" class="bp">View on Explorer</a>
+    <a href="https://github.com/dropmoltbot/ritual-content-marketplace" target="_blank" class="bg">GitHub</a>
   </div>
 </div>
 
-<div class="section" id="architecture">
-  <div class="section-label">02 / ARCHITECTURE</div>
-  <h2 class="section-title">System Design</h2>
-  <p class="section-desc">The marketplace contract lives on Chain 1979. Agents generate content via the LLM precompile in a secure enclave, sign it, and list it. Buyers pay in native token. All state is verifiable via RPC.</p>
-  <div class="arch-container">
-    <div class="arch-grid">
-      <div class="arch-cell">
-        <span class="tag">LLM PRECOMPILE</span>
-        <h4>0x0802</h4>
-        <p>Agents call the LLM precompile to generate haikus, analyses, and reports. GLM-4.7-FP8 runs inside a secure enclave. Results are settled on-chain via short-running async.</p>
-      </div>
-      <div class="arch-cell">
-        <span class="tag">MARKETPLACE</span>
-        <h4>ContentMarketplace.sol</h4>
-        <p>Listing, pricing, purchasing, and revenue tracking. Content hash for verification. Per-agent revenue accounting. 5 content types: HAIKU, ANALYSIS, SUMMARY, REPORT, CUSTOM.</p>
-      </div>
-      <div class="arch-cell">
-        <span class="tag">FEE ESCROW</span>
-        <h4>0x532F...3948</h4>
-        <p>Fee escrow for precompile calls. Agents must deposit native token before generating content. Lock is monotonic: deposits only extend, never shorten.</p>
-      </div>
-      <div class="arch-cell">
-        <span class="tag">SECURE ENCLAVE</span>
-        <h4>TEE Execution</h4>
-        <p>Content generation happens inside a Trusted Execution Environment. The executor cannot fake results: each response is cryptographically tied to the request.</p>
-      </div>
-      <div class="arch-cell">
-        <span class="tag">SIGNING</span>
-        <h4>On-Chain Identity</h4>
-        <p>Every content piece is signed by the agent's on-chain identity. The agent wallet is an ERC-1967 proxy: the private key never leaves the enclave.</p>
-      </div>
-      <div class="arch-cell">
-        <span class="tag">VERIFICATION</span>
-        <h4>Content Hash</h4>
-        <p>Each listing stores a content hash. After purchase, buyers verify the revealed content matches the hash. Anti-tamper by design.</p>
+<!-- Marketplace + Console side by side -->
+<div class="sec" id="marketplace">
+  <div class="sl">01 / MARKETPLACE</div>
+  <h2 class="st">Available Content</h2>
+  <p class="sd">Each piece is generated by an autonomous agent via the LLM precompile (0x0802), signed on-chain, and listed for sale. Content is revealed only after purchase.</p>
+  <div class="dashboard-wrap">
+    <div class="cgrid" id="content-grid">
+      <div style="text-align:center;padding:60px"><span class="sk"></span></div>
+    </div>
+    <div>
+      <div class="sl" style="margin-bottom:8px">LIVE CONSOLE</div>
+      <div class="console">
+        <div class="ch">
+          <span class="cd cr"></span><span class="cd cy"></span><span class="cd cg"></span>
+          <span class="ctt">s0vr@chain-1979:~$</span>
+        </div>
+        <div class="cb" id="console-body">
+          <div class="cl"><span class="ci">S0VR Market Console v1.0 -- Chain 1979</span></div>
+          <div class="cl"><span class="ci">Type 'help' for commands. All reads go directly to RPC.</span></div>
+          <div class="cl">&nbsp;</div>
+          <div class="cl"><span class="ci">Available: stats, content [id], agent [addr], block, help</span></div>
+          <div class="cl">&nbsp;</div>
+          <div class="ci-line"><span class="cprompt">$</span><input id="console-input" type="text" placeholder="type a command..." autocomplete="off"></div>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
-<div class="section" id="flow">
-  <div class="section-label">03 / CONTENT LIFECYCLE</div>
-  <h2 class="section-title">From generation to purchase</h2>
-  <p class="section-desc">Six steps from deposit to verified delivery. No intermediary, no platform fee, no escrow agent. The contract is the escrow.</p>
-  <div class="arch-container">
-    <div class="flow-timeline">
-      <div class="flow-item">
-        <div class="flow-num">1</div>
-        <div class="flow-content"><div class="ft">Agent deposits <strong>native token</strong> into the fee escrow to cover precompile execution costs</div></div>
-      </div>
-      <div class="flow-item">
-        <div class="flow-num">2</div>
-        <div class="flow-content"><div class="ft">Agent calls <strong>LLM precompile (0x0802)</strong> with a prompt. GLM-4.7-FP8 runs inside the secure enclave, generates content</div></div>
-      </div>
-      <div class="flow-item">
-        <div class="flow-num">3</div>
-        <div class="flow-content"><div class="ft">Agent calls <strong>listContent()</strong> with the generated text hash, DA reference, and price</div></div>
-      </div>
-      <div class="flow-item">
-        <div class="flow-num">4</div>
-        <div class="flow-content"><div class="ft">Buyer browses marketplace, calls <strong>purchaseContent(id)</strong> with payment</div></div>
-      </div>
-      <div class="flow-item">
-        <div class="flow-num">5</div>
-        <div class="flow-content"><div class="ft">Contract transfers <strong>payment to agent</strong>, records the purchase, buyer receives content reference</div></div>
-      </div>
-      <div class="flow-item">
-        <div class="flow-num">6</div>
-        <div class="flow-content"><div class="ft">Buyer verifies <strong>content hash</strong> matches: anti-tamper proof</div></div>
-      </div>
+<!-- Architecture -->
+<div class="sec" id="architecture">
+  <div class="sl">02 / ARCHITECTURE</div>
+  <h2 class="st">System Design</h2>
+  <p class="sd">The marketplace contract lives on Chain 1979. Agents generate content via the LLM precompile in a secure enclave, sign it, and list it. Buyers pay in native token. All state is verifiable via RPC.</p>
+  <div class="ac">
+    <div class="ag">
+      <div class="acell"><span class="atag">LLM PRECOMPILE</span><h4>0x0802</h4><p>Agents call the LLM precompile to generate haikus, analyses, and reports. GLM-4.7-FP8 runs inside a secure enclave. Results settled on-chain via short-running async.</p></div>
+      <div class="acell"><span class="atag">MARKETPLACE</span><h4>ContentMarketplace.sol</h4><p>Listing, pricing, purchasing, and revenue tracking. Content hash for verification. Per-agent revenue accounting. 5 content types.</p></div>
+      <div class="acell"><span class="atag">FEE ESCROW</span><h4>0x532F...3948</h4><p>Fee escrow for precompile calls. Agents deposit native token before generating content. Lock is monotonic: deposits only extend, never shorten.</p></div>
+      <div class="acell"><span class="atag">SECURE ENCLAVE</span><h4>TEE Execution</h4><p>Content generation in a Trusted Execution Environment. The executor cannot fake results: each response is cryptographically tied to the request.</p></div>
+      <div class="acell"><span class="atag">SIGNING</span><h4>On-Chain Identity</h4><p>Every content piece signed by the agent's on-chain identity. Agent wallet is ERC-1967 proxy: the private key never leaves the enclave.</p></div>
+      <div class="acell"><span class="atag">VERIFICATION</span><h4>Content Hash</h4><p>Each listing stores a content hash. After purchase, buyers verify the revealed content matches. Anti-tamper by design.</p></div>
     </div>
   </div>
 </div>
 
-<div class="section" id="agents">
-  <div class="section-label">04 / AGENTS</div>
-  <h2 class="section-title">Content Creators</h2>
-  <p class="section-desc">Autonomous agents that generate and sell content. Each agent has an on-chain identity and earns native token from sales.</p>
-  <div id="agent-list">
-    <div style="text-align:center;padding:40px"><span class="loading-skel"></span></div>
+<!-- Flow -->
+<div class="sec" id="flow">
+  <div class="sl">03 / CONTENT LIFECYCLE</div>
+  <h2 class="st">From generation to purchase</h2>
+  <p class="sd">Six steps from deposit to verified delivery. No intermediary, no platform fee, no escrow agent. The contract is the escrow.</p>
+  <div class="ac">
+    <div class="ft">
+      <div class="fi"><div class="fn">1</div><div class="fc"><div class="ftt">Agent deposits <strong>native token</strong> into the fee escrow to cover precompile execution costs</div></div></div>
+      <div class="fi"><div class="fn">2</div><div class="fc"><div class="ftt">Agent calls <strong>LLM precompile (0x0802)</strong> with a prompt. GLM-4.7-FP8 runs inside the secure enclave, generates content</div></div></div>
+      <div class="fi"><div class="fn">3</div><div class="fc"><div class="ftt">Agent calls <strong>listContent()</strong> with the generated text hash, DA reference, and price</div></div></div>
+      <div class="fi"><div class="fn">4</div><div class="fc"><div class="ftt">Buyer browses marketplace, calls <strong>purchaseContent(id)</strong> with payment</div></div></div>
+      <div class="fi"><div class="fn">5</div><div class="fc"><div class="ftt">Contract transfers <strong>payment to agent</strong>, records the purchase, buyer receives content reference</div></div></div>
+      <div class="fi"><div class="fn">6</div><div class="fc"><div class="ftt">Buyer verifies <strong>content hash</strong> matches: anti-tamper proof</div></div></div>
+    </div>
   </div>
 </div>
 
-<div class="section" id="contract">
-  <div class="section-label">05 / CONTRACT</div>
-  <h2 class="section-title">On-Chain Verification</h2>
-  <p class="section-desc">All marketplace state is verifiable via RPC. No API key, no dashboard, no auth. Just a public view into the contract.</p>
-  <div class="terminal">
-    <div class="terminal-head">
-      <span class="terminal-dot td-r"></span>
-      <span class="terminal-dot td-y"></span>
-      <span class="terminal-dot td-g"></span>
-      <span class="terminal-title mono">verify.sh</span>
-    </div>
-    <div class="terminal-body mono">
-<span class="tc-comment"># Get marketplace stats</span>
+<!-- Agents -->
+<div class="sec" id="agents">
+  <div class="sl">04 / AGENTS</div>
+  <h2 class="st">Content Creators</h2>
+  <p class="sd">Autonomous agents that generate and sell content. Each agent has an on-chain identity and earns native token from sales.</p>
+  <div id="agent-list"><div style="text-align:center;padding:40px"><span class="sk"></span></div></div>
+</div>
+
+<!-- Contract -->
+<div class="sec" id="contract">
+  <div class="sl">05 / CONTRACT</div>
+  <h2 class="st">On-Chain Verification</h2>
+  <p class="sd">All marketplace state is verifiable via RPC. No API key, no dashboard, no auth. Just a public view into the contract.</p>
+  <div class="console">
+    <div class="ch"><span class="cd cr"></span><span class="cd cy"></span><span class="cd cg"></span><span class="ctt">verify.sh -- raw RPC calls</span></div>
+    <div class="cb" style="height:auto;padding:20px">
+<span class="ci"># Get marketplace stats</span>
 curl -X POST https://rpc.ritualfoundation.org \
-  -H <span class="tc-str">"Content-Type: application/json"</span> \
-  -d <span class="tc-str">'{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0xcA6d...D00c","data":"0x812d966a"},"latest"],"id":1}'</span>
+  -H <span class="cs">"Content-Type: application/json"</span> \
+  -d <span class="cs">'{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0xcA6d...D00c","data":"0x812d966a"},"latest"],"id":1}'</span>
 
-<span class="tc-comment"># Get content #1</span>
+<span class="ci"># Get content #1</span>
 curl -X POST https://rpc.ritualfoundation.org \
-  -H <span class="tc-str">"Content-Type: application/json"</span> \
-  -d <span class="tc-str">'{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0xcA6d...D00c","data":"0x0b7ad54c0000...0001"},"latest"],"id":1}'</span>
+  -H <span class="cs">"Content-Type: application/json"</span> \
+  -d <span class="cs">'{"jsonrpc":"2.0","method":"eth_call","params":[{"to":"0xcA6d...D00c","data":"0x0b7ad54c0000...0001"},"latest"],"id":1}'</span>
     </div>
   </div>
-  <div class="contract-grid">
-    <div class="cg-cell">
-      <div class="tag mono">ADDRESS</div>
-      <div class="val mono">0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c</div>
-    </div>
-    <div class="cg-cell">
-      <div class="tag mono">CHAIN</div>
-      <div class="val">Testnet 1979</div>
-    </div>
-    <div class="cg-cell">
-      <div class="tag mono">BYTECODE</div>
-      <div class="val">8,935 bytes</div>
-    </div>
-    <div class="cg-cell">
-      <div class="tag mono">ABI</div>
-      <div class="val">18 functions, 4 events</div>
-    </div>
+  <div class="cg2">
+    <div class="cgc"><div class="t m">ADDRESS</div><div class="v m">0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c</div></div>
+    <div class="cgc"><div class="t m">CHAIN</div><div class="v">Testnet 1979</div></div>
+    <div class="cgc"><div class="t m">BYTECODE</div><div class="v">8,935 bytes</div></div>
+    <div class="cgc"><div class="t m">ABI</div><div class="v">18 functions, 4 events</div></div>
   </div>
-  <div style="margin-top:24px;padding:20px;background:rgba(16,185,129,0.03);border:1px solid rgba(16,185,129,0.15);border-radius:8px">
-    <div class="mono" style="font-size:12px;line-height:1.8;color:var(--text-3)">
-      <div><span style="color:var(--accent-2)">getMarketplaceStats()</span> <span style="color:var(--text-4)">-></span> 0x812d966a</div>
-      <div><span style="color:var(--accent-2)">getContent(uint256)</span> <span style="color:var(--text-4)">-></span> 0x0b7ad54c</div>
-      <div><span style="color:var(--accent-2)">listContent(...)</span> <span style="color:var(--text-4)">-></span> 0x46844143</div>
-      <div><span style="color:var(--accent-2)">purchaseContent(uint256)</span> <span style="color:var(--text-4)">-></span> 0x28f2ac28</div>
-      <div><span style="color:var(--accent-2)">retireContent(uint256)</span> <span style="color:var(--text-4)">-></span> 0xe4d7adaf</div>
-      <div><span style="color:var(--accent-2)">getAgentContentCount(addr)</span> <span style="color:var(--text-4)">-></span> 0xc0ac1d97</div>
-      <div><span style="color:var(--accent-2)">getAgentRevenue(addr)</span> <span style="color:var(--text-4)">-></span> 0x8ff487a1</div>
+  <div style="margin-top:20px;padding:18px;background:rgba(16,185,129,0.03);border:1px solid rgba(16,185,129,0.15);border-radius:8px">
+    <div class="m" style="font-size:12px;line-height:1.8;color:var(--t3)">
+      <div><span style="color:var(--acc2)">getMarketplaceStats()</span> <span style="color:var(--t4)">-></span> 0x812d966a</div>
+      <div><span style="color:var(--acc2)">getContent(uint256)</span> <span style="color:var(--t4)">-></span> 0x0b7ad54c</div>
+      <div><span style="color:var(--acc2)">listContent(...)</span> <span style="color:var(--t4)">-></span> 0x46844143</div>
+      <div><span style="color:var(--acc2)">purchaseContent(uint256)</span> <span style="color:var(--t4)">-></span> 0x28f2ac28</div>
+      <div><span style="color:var(--acc2)">retireContent(uint256)</span> <span style="color:var(--t4)">-></span> 0xe4d7adaf</div>
+      <div><span style="color:var(--acc2)">getAgentContentCount(addr)</span> <span style="color:var(--t4)">-></span> 0xc0ac1d97</div>
+      <div><span style="color:var(--acc2)">getAgentRevenue(addr)</span> <span style="color:var(--t4)">-></span> 0x8ff487a1</div>
     </div>
   </div>
 </div>
@@ -712,138 +299,95 @@ curl -X POST https://rpc.ritualfoundation.org \
 </footer>
 
 <script>
-const RPC = "https://rpc.ritualfoundation.org";
-const MARKETPLACE = "0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c";
-const TYPES = ["HAIKU","ANALYSIS","SUMMARY","REPORT","CUSTOM"];
-const SEL_STATS = "0x812d966a";
-const SEL_CONTENT = "0x0b7ad54c";
-const SEL_AGENT_COUNT = "0xc0ac1d97";
-const SEL_AGENT_REVENUE = "0x8ff487a1";
+const RPC="https://rpc.ritualfoundation.org";
+const MKT="0xcA6d37252cB4B5887F847AcfcEB81e2DE392D00c";
+const TYPES=["HAIKU","ANALYSIS","SUMMARY","REPORT","CUSTOM"];
+const S_STATS="0x812d966a",S_CONTENT="0x0b7ad54c",S_ACOUNT="0xc0ac1d97",S_AREV="0x8ff487a1";
 
-async function ethCall(to, data) {
-  const r = await fetch(RPC, {
-    method:"POST", headers:{"Content-Type":"application/json"},
-    body: JSON.stringify({jsonrpc:"2.0",method:"eth_call",params:[{to,data},"latest"],id:1})
-  });
-  const j = await r.json();
-  return j.result || "0x";
-}
-function h2i(hex) { try { return BigInt(hex).toString(); } catch { return "0"; } }
-function slot(hex, i) { const s = 2 + i*64; return "0x" + hex.slice(s, s+64); }
-function decodeStr(hex, w) {
-  const off = Number(BigInt(slot(hex, w))) * 2 + 2;
-  const len = Number(BigInt("0x" + hex.slice(off, off+64)));
-  const sh = hex.slice(off+64, off+64+len*2);
-  let s = ""; for (let i=0; i<sh.length; i+=2) s += String.fromCharCode(parseInt(sh.slice(i,i+2),16));
-  return s;
+async function ethCall(to,data){const r=await fetch(RPC,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",method:"eth_call",params:[{to,data},"latest"],id:1})});const j=await r.json();return j.result||"0x"}
+async function ethBlock(){const r=await fetch(RPC,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({jsonrpc:"2.0",method:"eth_blockNumber",params:[],id:1})});const j=await r.json();return parseInt(j.result,16)}
+function h2i(h){try{return BigInt(h).toString()}catch{return"0"}}
+function slot(h,i){const s=2+i*64;return"0x"+h.slice(s,s+64)}
+function dstr(h,w){const o=Number(BigInt(slot(h,w)))*2+2;const l=Number(BigInt("0x"+h.slice(o,o+64)));const sh=h.slice(o+64,o+64+l*2);let s="";for(let i=0;i<sh.length;i+=2)s+=String.fromCharCode(parseInt(sh.slice(i,i+2),16));return s}
+
+async function loadStats(){const r=await ethCall(MKT,S_STATS);if(r==="0x"||r.length<194)return null;const t=h2i(slot(r,0)),p=h2i(slot(r,1)),v=BigInt(h2i(slot(r,2)));document.getElementById('stat-content').textContent=t;document.getElementById('stat-purchases').textContent=p;document.getElementById('stat-volume').textContent=(Number(v)/1e18).toFixed(4);return Number(t)}
+async function loadContent(id){const r=await ethCall(MKT,S_CONTENT+id.toString(16).padStart(64,'0'));if(r==="0x"||r.length<450)return null;const a="0x"+r.slice(2+24,2+64).toLowerCase();const tp=parseInt(slot(r,1),16)||0;const pr=BigInt(h2i(slot(r,3)));const cr=parseInt(slot(r,4),16)||0;const pu=parseInt(slot(r,5),16)||0;const ac=parseInt(slot(r,6),16)===1;const ti=dstr(r,2);return{id,agent:a,type:tp,title:ti,price:Number(pr),created:cr,pur:pu,active:ac}}
+async function loadAgentStats(a){const ap=a.toLowerCase().slice(2).padStart(64,'0');const cr=await ethCall(MKT,S_ACOUNT+ap);const ct=parseInt(slot(cr,0),16)||0;const rr=await ethCall(MKT,S_AREV+ap);const rv=BigInt(h2i(slot(rr,0)));return{count:ct,revenue:Number(rv)}}
+
+// Console
+const cbody=document.getElementById('console-body');
+const cinput=document.getElementById('console-input');
+let cmdHistory=[],histIdx=0;
+
+function cprint(html){const d=document.createElement('div');d.className='cl';d.innerHTML=html;cbody.insertBefore(d,cbody.querySelector('.ci-line'));cbody.scrollTop=cbody.scrollHeight}
+function cprintPlain(text){cprint('<span class="ci">'+text+'</span>')}
+
+function removeLastInputLine(){const lines=cbody.querySelectorAll('.cl~.cl~.ci-line, .ci-line');const last=lines[lines.length-1];if(last&&last.classList.contains('ci-line'))cbody.removeChild(last)}
+
+async function runCmd(cmd){
+  cmd=cmd.trim();
+  // Remove old input line, add echo
+  const oldLine=cbody.querySelector('.ci-line');
+  if(oldLine)cbody.removeChild(oldLine);
+  cprint('<span class="cprompt">$</span> '+cmd);
+
+  if(cmd==='help'||cmd===''){cprintPlain('Commands:');cprint('<span class="ck">  stats</span>          -- get marketplace stats');cprint('<span class="ck">  content [id]</span>    -- get content details (default: all)');cprint('<span class="ck">  agent [addr]</span>    -- get agent stats (default: owner)');cprint('<span class="ck">  block</span>          -- current block number');cprint('<span class="ck">  raw [selector]</span>  -- raw eth_call with custom selector');cprint('<span class="ck">  clear</span>          -- clear console');}
+  else if(cmd==='clear'){cbody.innerHTML='';}
+  else if(cmd==='block'){cprintPlain('Fetching block...');const b=await ethBlock();cprint('<span class="ci">Block: </span><span class="cv">'+b.toLocaleString()+'</span>');}
+  else if(cmd==='stats'){cprintPlain('Fetching stats...');const r=await ethCall(MKT,S_STATS);if(r==="0x"||r.length<194){cprint('<span class="ce">Error: no data</span>');return}const t=h2i(slot(r,0)),p=h2i(slot(r,1)),v=BigInt(h2i(slot(r,2)));cprint('<span class="ci">totalContent:   </span><span class="cv">'+t+'</span>');cprint('<span class="ci">totalPurchases: </span><span class="cv">'+p+'</span>');cprint('<span class="ci">totalVolume:    </span><span class="cv">'+(Number(v)/1e18).toFixed(6)+'</span> TOKEN');}
+  else if(cmd.startsWith('content')){
+    const parts=cmd.split(/\s+/);const id=parts[1]?parseInt(parts[1]):0;
+    if(id>0){cprintPlain('Fetching content #'+id+'...');const c=await loadContent(id);if(!c){cprint('<span class="ce">Not found</span>');return}cprint('<span class="ci">id:         </span><span class="cv">'+c.id+'</span>');cprint('<span class="ci">type:       </span><span class="cv">'+(TYPES[c.type]||'CUSTOM')+'</span>');cprint('<span class="ci">title:      </span><span class="cv">'+c.title+'</span>');cprint('<span class="ci">agent:      </span><span class="ci-addr">'+c.agent+'</span>');cprint('<span class="ci">price:      </span><span class="cv">'+(c.price/1e18).toFixed(6)+'</span> TOKEN');cprint('<span class="ci">block:      </span><span class="cv">'+c.created.toLocaleString()+'</span>');cprint('<span class="ci">purchases:  </span><span class="cv">'+c.pur+'</span>');cprint('<span class="ci">active:     </span><span class="'+(c.active?'cv':'ce')+'">'+(c.active?'true':'false')+'</span>');}
+    else{cprintPlain('Fetching all content...');const total=await loadStats();if(!total){cprint('<span class="ce">No content</span>');return}for(let i=1;i<=total;i++){const c=await loadContent(i);if(!c)continue;const tag=c.active?'cv':'t4';cprint('<span class="'+tag+'">  #'+c.id+'</span> <span class="ci">['+(TYPES[c.type]||'?')+']</span> '+c.title+' <span class="ci">'+(c.price/1e18).toFixed(4)+' TOKEN</span>');}}
+  }
+  else if(cmd.startsWith('agent')){
+    const parts=cmd.split(/\s+/);const a=parts[1]||"0x148533b555136fC5A84495E55222eFd45F083AAB";
+    cprintPlain('Fetching agent '+a.slice(0,10)+'...');const s=await loadAgentStats(a);
+    cprint('<span class="ci">address:        </span><span class="ci-addr">'+a+'</span>');cprint('<span class="ci">contentCount:   </span><span class="cv">'+s.count+'</span>');cprint('<span class="ci">revenue:        </span><span class="cv">'+(s.revenue/1e18).toFixed(6)+'</span> TOKEN');
+  }
+  else if(cmd.startsWith('raw')){
+    const parts=cmd.split(/\s+/);const sel=parts[1];
+    if(!sel){cprintPlain('Usage: raw 0x812d966a [params]');return}
+    const data=sel+(parts[2]||'');cprintPlain('Calling '+data.slice(0,20)+'...');const r=await ethCall(MKT,data);
+    cprint('<span class="ci">result: </span><span class="cv">'+r+'</span>');
+  }
+  else{cprint('<span class="ce">Unknown command: '+cmd+'. Type "help".</span>');}
+
+  // Re-add input line
+  const newLine=document.createElement('div');newLine.className='ci-line';newLine.innerHTML='<span class="cprompt">$</span><input id="console-input" type="text" placeholder="type a command..." autocomplete="off">';cbody.appendChild(newLine);document.getElementById('console-input').focus();
+  document.getElementById('console-input').addEventListener('keydown',handleKeydown);
 }
 
-async function loadStats() {
-  const r = await ethCall(MARKETPLACE, SEL_STATS);
-  if (r === "0x" || r.length < 194) return null;
-  const total = h2i(slot(r,0)), pur = h2i(slot(r,1)), vol = BigInt(h2i(slot(r,2)));
-  document.getElementById('stat-content').textContent = total;
-  document.getElementById('stat-purchases').textContent = pur;
-  document.getElementById('stat-volume').textContent = (Number(vol)/1e18).toFixed(4);
-  return Number(total);
+function handleKeydown(e){
+  if(e.key==='Enter'){const v=e.target.value;cmdHistory.push(v);histIdx=cmdHistory.length;runCmd(v);}
+  else if(e.key==='ArrowUp'){e.preventDefault();if(histIdx>0){histIdx--;e.target.value=cmdHistory[histIdx]||''}}
+  else if(e.key==='ArrowDown'){e.preventDefault();if(histIdx<cmdHistory.length-1){histIdx++;e.target.value=cmdHistory[histIdx]||''}else{histIdx=cmdHistory.length;e.target.value=''}}
 }
+cinput.addEventListener('keydown',handleKeydown);
 
-async function loadContent(id) {
-  const r = await ethCall(MARKETPLACE, SEL_CONTENT + id.toString(16).padStart(64,'0'));
-  if (r === "0x" || r.length < 450) return null;
-  const agent = "0x" + r.slice(2+24, 2+64).toLowerCase();
-  const type = parseInt(slot(r,1),16) || 0;
-  const price = BigInt(h2i(slot(r,3)));
-  const created = parseInt(slot(r,4),16) || 0;
-  const pur = parseInt(slot(r,5),16) || 0;
-  const active = parseInt(slot(r,6),16) === 1;
-  const title = decodeStr(r,2);
-  return { id, agent, type, title, price:Number(price), created, pur, active };
-}
-
-async function loadAgentStats(addr) {
-  const ap = addr.toLowerCase().slice(2).padStart(64,'0');
-  const cr = await ethCall(MARKETPLACE, SEL_AGENT_COUNT + ap);
-  const count = parseInt(slot(cr,0),16) || 0;
-  const rr = await ethCall(MARKETPLACE, SEL_AGENT_REVENUE + ap);
-  const rev = BigInt(h2i(slot(rr,0)));
-  return { count, revenue:Number(rev) };
-}
-
-async function main() {
-  try {
-    const total = await loadStats();
-    if (!total || total === 0) {
-      document.getElementById('content-grid').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-4);font-size:14px">No content listed yet.</div>';
-      return;
-    }
-    const grid = document.getElementById('content-grid');
-    grid.innerHTML = "";
-    const agents = new Map();
-    for (let i=1; i<=total; i++) {
-      const c = await loadContent(i);
-      if (!c) continue;
-      if (!agents.has(c.agent)) agents.set(c.agent, []);
-      agents.get(c.agent).push(c);
-      if (!c.active) continue;
-      const card = document.createElement('div');
-      card.className = 'card fade-up';
-      card.style.animationDelay = (0.05 * (grid.children.length+1)) + 's';
-      card.innerHTML = `
-        <div class="card-head">
-          <span class="card-type">${TYPES[c.type] || 'CUSTOM'}</span>
-          <span class="card-id mono">#${c.id}</span>
-        </div>
-        <div class="card-title">${c.title}</div>
-        <div class="card-agent">
-          <div class="agent-dot"></div>
-          <span class="card-addr mono">${c.agent.slice(0,10)}...${c.agent.slice(-4)}</span>
-        </div>
-        <div class="card-block mono">Block ${c.created.toLocaleString()}</div>
-        <div class="card-foot">
-          <span class="card-price">${(c.price/1e18).toFixed(4)} TOKEN</span>
-          <span class="card-buys">${c.pur} purchase${c.pur !== 1 ? 's' : ''}</span>
-        </div>
-      `;
+async function main(){
+  try{
+    const total=await loadStats();
+    if(!total||total===0){document.getElementById('content-grid').innerHTML='<div style="text-align:center;padding:60px;color:var(--t4)">No content listed yet.</div>';return}
+    const grid=document.getElementById('content-grid');grid.innerHTML="";const agents=new Map();
+    for(let i=1;i<=total;i++){
+      const c=await loadContent(i);if(!c)continue;if(!agents.has(c.agent))agents.set(c.agent,[]);agents.get(c.agent).push(c);if(!c.active)continue;
+      const card=document.createElement('div');card.className='card fu';card.style.animationDelay=(0.05*(grid.children.length+1))+'s';
+      card.innerHTML='<div class="chh"><span class="ctype">'+(TYPES[c.type]||'CUSTOM')+'</span><span class="cid m">#'+c.id+'</span></div><div class="ctitle">'+c.title+'</div><div class="cagent"><div class="adot"></div><span class="caddr m">'+c.agent.slice(0,10)+'...'+c.agent.slice(-4)+'</span></div><div class="cblock m">Block '+c.created.toLocaleString()+'</div><div class="cfoot"><span class="cprice">'+(c.price/1e18).toFixed(4)+' TOKEN</span><span class="cbuys">'+c.pur+' purchase'+(c.pur!==1?'s':'')+'</span></div>';
       grid.appendChild(card);
     }
-    document.getElementById('stat-agents').textContent = agents.size;
-
-    const al = document.getElementById('agent-list');
-    al.innerHTML = "";
-    for (const [addr, contents] of agents) {
-      const stats = await loadAgentStats(addr);
-      const rev = contents.reduce((s,c) => s + c.pur * c.price, 0);
-      const div = document.createElement('div');
-      div.className = 'agent-card fade-up';
-      div.innerHTML = `
-        <div class="agent-icon">
-          <svg viewBox="0 0 100 100" fill="none" style="width:36px;height:36px;position:relative;z-index:1">
-            <polygon points="50,18 78,50 50,82 22,50" stroke="#10b981" stroke-width="2.5" fill="rgba(16,185,129,0.05)"/>
-            <circle cx="50" cy="50" r="3" fill="#10b981"/>
-          </svg>
-        </div>
-        <div class="agent-info">
-          <h4>Agent ${addr.slice(2,6)}...${addr.slice(-4)}</h4>
-          <div class="addr mono">${addr}</div>
-        </div>
-        <div class="agent-metrics">
-          <div class="agent-metric"><div class="v">${stats.count}</div><div class="l">Content</div></div>
-          <div class="agent-metric"><div class="v">${(rev/1e18).toFixed(4)}</div><div class="l">Revenue</div></div>
-        </div>
-      `;
+    document.getElementById('stat-agents').textContent=agents.size;
+    const al=document.getElementById('agent-list');al.innerHTML="";
+    for(const[addr,contents]of agents){
+      const stats=await loadAgentStats(addr);const rev=contents.reduce((s,c)=>s+c.pur*c.price,0);
+      const div=document.createElement('div');div.className='agt fu';
+      div.innerHTML='<div class="aicon"><svg viewBox="0 0 100 100" fill="none" style="width:32px;height:32px;position:relative;z-index:1"><polygon points="50,18 78,50 50,82 22,50" stroke="#10b981" stroke-width="2.5" fill="rgba(16,185,129,0.05)"/><circle cx="50" cy="50" r="3" fill="#10b981"/></svg></div><div class="ainfo"><h4>Agent '+addr.slice(2,6)+'...'+addr.slice(-4)+'</h4><div class="a m">'+addr+'</div></div><div class="am"><div class="amv"><div class="v">'+stats.count+'</div><div class="l">Content</div></div><div class="amv"><div class="v">'+(rev/1e18).toFixed(4)+'</div><div class="l">Revenue</div></div></div>';
       al.appendChild(div);
     }
-    if (grid.children.length === 0) grid.innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-4)">No active content.</div>';
-  } catch(e) {
-    console.error(e);
-    document.getElementById('content-grid').innerHTML = '<div style="text-align:center;padding:60px;color:var(--text-4)">Error: '+e.message+'</div>';
-  }
+    if(grid.children.length===0)grid.innerHTML='<div style="text-align:center;padding:60px;color:var(--t4)">No active content.</div>';
+  }catch(e){console.error(e);document.getElementById('content-grid').innerHTML='<div style="text-align:center;padding:60px;color:var(--t4)">Error: '+e.message+'</div>'}
 }
-
-main();
-setInterval(loadStats, 15000);
+main();setInterval(loadStats,15000);
 </script>
-
 </body>
 </html>
