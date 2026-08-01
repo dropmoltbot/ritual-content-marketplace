@@ -1,7 +1,26 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react'
-import { createConfig, http, useAccount, useConnect, useDisconnect, WagmiProvider } from 'wagmi'
+import React, { useState, useEffect, useRef, useCallback, Component } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { createConfig, http, useAccount, useConnect, useDisconnect, WagmiProvider, createConfig as wagmiCreateConfig } from 'wagmi'
 import { RainbowKitProvider, ConnectButton, getDefaultConfig } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
+
+const queryClient = new QueryClient()
+
+// Error boundary
+class ErrorBoundary extends Component {
+  constructor(props) { super(props); this.state = { hasError: false, error: null } }
+  static getDerivedStateFromError(error) { return { hasError: true, error: error.message } }
+  componentDidCatch(error, info) { console.error('App error:', error, info) }
+  render() {
+    if (this.state.hasError) {
+      return React.createElement('div', { style: { padding: '40px', textAlign: 'center', color: '#ef4444', fontFamily: 'JetBrains Mono, monospace' } },
+        React.createElement('h2', null, 'Render Error'),
+        React.createElement('p', { style: { fontSize: '12px', marginTop: '12px' } }, this.state.error)
+      )
+    }
+    return this.props.children
+  }
+}
 
 // --- Config ---
 const RPC = "https://rpc.ritualfoundation.org"
@@ -28,7 +47,8 @@ const wagmiConfig = getDefaultConfig({
   chains: [ritualChain],
   transports: { [CHAIN_ID]: http(RPC) },
   ssr: false,
-  appName: 'S0VR Market'
+  appName: 'S0VR Market',
+  projectId: 's0vr-market-testnet'
 })
 
 // --- RPC helpers ---
@@ -264,25 +284,28 @@ function AppContent() {
 
   const handlePurchase = async (content) => {
     if (!isConnected) {
-      document.querySelector('[data-rk-connect-button]')?.click()
+      // Try to click the connect button
+      const btn = document.querySelector('[data-rk] button') || document.querySelector('button[data-rk]')
+      if (btn) btn.click()
       return
     }
     setPurchasing(true)
     setPurchaseResult(null)
     try {
       const { sendTransaction } = await import('wagmi/actions')
-      const { sendTransactionAsync } = await import('wagmi/actions')
+      const config = wagmiConfig
       const txData = SEL_PURCHASE + content.id.toString(16).padStart(64,'0')
       const value = BigInt(Math.ceil((content.price/1e18)*1e18))
-      const hash = await sendTransactionAsync({
+      const hash = await sendTransaction(config, {
         to: MARKETPLACE,
         data: txData,
         value: value,
-        chainId: CHAIN_ID
+        chainId: CHAIN_ID,
+        account: address
       })
       setPurchaseResult({ success: true, hash })
     } catch(e) {
-      setPurchaseResult({ success: false, error: e.message })
+      setPurchaseResult({ success: false, error: e.shortMessage || e.message })
     }
     setPurchasing(false)
   }
@@ -422,10 +445,14 @@ function AppContent() {
 
 export default function App() {
   return (
-    <WagmiProvider config={wagmiConfig}>
-      <RainbowKitProvider>
-        <AppContent />
-      </RainbowKitProvider>
-    </WagmiProvider>
+    <ErrorBoundary>
+      <WagmiProvider config={wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+          <RainbowKitProvider>
+            <AppContent />
+          </RainbowKitProvider>
+        </QueryClientProvider>
+      </WagmiProvider>
+    </ErrorBoundary>
   )
 }
