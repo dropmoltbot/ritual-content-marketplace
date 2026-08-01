@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, Component } from 'react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { createConfig, http, useAccount, useConnect, useDisconnect, WagmiProvider, createConfig as wagmiCreateConfig } from 'wagmi'
+import { http, createConfig, useAccount, useConnect, useDisconnect, WagmiProvider } from 'wagmi'
 import { RainbowKitProvider, ConnectButton, getDefaultConfig } from '@rainbow-me/rainbowkit'
 import '@rainbow-me/rainbowkit/styles.css'
 
@@ -43,12 +43,12 @@ const ritualChain = {
   testnet: true
 }
 
-const wagmiConfig = getDefaultConfig({
+// Use createConfig directly (no WalletConnect cloud dependency)
+const wagmiConfig = createConfig({
   chains: [ritualChain],
   transports: { [CHAIN_ID]: http(RPC) },
   ssr: false,
-  appName: 'S0VR Market',
-  projectId: 's0vr-market-testnet'
+  multiInjectedProviderDiscovery: true
 })
 
 // --- RPC helpers ---
