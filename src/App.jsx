@@ -256,10 +256,12 @@ function AppContent() {
       const s = await loadStats()
       if (s) setStats({ content: s.total, purchases: s.purchases, volume: (s.volume/1e18).toFixed(4), agents: '...' })
       if (s) {
+        // Parallel fetch all content
+        const ids = Array.from({length: s.total}, (_, i) => i + 1)
+        const results = await Promise.all(ids.map(id => loadContent(id)))
         const items = []
         const agentMap = new Map()
-        for (let i=1; i<=s.total; i++) {
-          const c = await loadContent(i)
+        for (const c of results) {
           if (!c) continue
           if (!agentMap.has(c.agent)) agentMap.set(c.agent, [])
           agentMap.get(c.agent).push(c)
@@ -345,7 +347,7 @@ function AppContent() {
           <div className="stat"><div className="stat-val">{stats.volume}</div><div className="stat-label">VOLUME</div></div>
           <div className="stat"><div className="stat-val">{stats.agents}</div><div className="stat-label">AGENTS</div></div>
         </div>
-        <a href={`https://explorer.ritualfoundation.org/address/${MARKETPLACE}`} target="_blank" rel="noopener" className="explorer-link">VIEW ON EXPLORER >></a>
+        <a href={`https://explorer.ritualfoundation.org/address/${MARKETPLACE}`} target="_blank" rel="noopener" className="explorer-link">VIEW ON EXPLORER {'>>'}</a>
       </div>
 
       <div className="section" id="marketplace">
@@ -363,7 +365,7 @@ function AppContent() {
                 <div className="agent-row"><div className="agent-dot"></div><span className="agent-addr">{c.agent.slice(0,10)}...{c.agent.slice(-4)}</span></div>
                 <div className="block-info mono">Block {c.createdAt.toLocaleString()}</div>
                 <div className="price-row"><span className="price">{(c.price/1e18).toFixed(4)} RITUAL</span><span className="purchases">{c.purchased} purchase{c.purchased!==1?'s':''}</span></div>
-                <div className="tap-hint">Tap for details >></div>
+                <div className="tap-hint">Tap for details {'>>'}</div>
               </div>
             ))}
           </div>
